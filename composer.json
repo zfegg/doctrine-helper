@@ -1,0 +1,39 @@
+{
+  "name": "zfegg/doctrine-helper",
+  "description": "Doctrine helpers.",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Moln Xie",
+      "email": "moln.xie@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "doctrine/orm": "^2.5",
+    "psr/container": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zfegg\\DoctrineHelper\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ZfeggTest\\DoctrineHelper\\": "test/"
+    }
+  },
+  "extra": {
+    "laminas": {
+      "config-provider": "Zfegg\\DoctrineHelper\\ConfigProvider"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5",
+    "slevomat/coding-standard": "^6.4",
+    "symfony/serializer": "^5.2",
+    "laminas/laminas-servicemanager": "^3.6",
+    "roave/psr-container-doctrine": "^2.2"
+  }
+}
