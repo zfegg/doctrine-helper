@@ -26,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @final
  *
  * [shell]
- *   > console doctrine:mapping:import --namespace="App\Entity" --path=src/App/Entity
+ *   > console doctrine:mapping:import "App\Entity" --path=src/App/Entity
  */
 class ImportMappingDoctrineCommand extends Command
 {
@@ -49,6 +49,7 @@ class ImportMappingDoctrineCommand extends Command
     {
         $this
             ->setName('doctrine:mapping:import')
+            ->addArgument('name', InputArgument::REQUIRED, 'The namespace to import the mapping information to')
             ->addArgument('mapping-type', InputArgument::OPTIONAL, 'The mapping type to export the imported mapping information to')
             ->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command')
             ->addOption('shard', null, InputOption::VALUE_REQUIRED, 'The shard connection to use for this command')
@@ -56,7 +57,6 @@ class ImportMappingDoctrineCommand extends Command
             ->addOption('force', null, InputOption::VALUE_NONE, 'Force to overwrite existing mapping files.')
             ->addOption('path', null, InputOption::VALUE_REQUIRED, 'The path where the files would be generated (not used when a bundle is passed).')
             ->addOption('prefix', null, InputOption::VALUE_REQUIRED, 'The table prefix to use for this command')
-            ->addOption('namespace', null, InputOption::VALUE_REQUIRED, 'The namespace to import the mapping information to')
             ->setDescription('Imports mapping information from an existing database')
             ->setHelp(<<<EOT
 The <info>%command.name%</info> command imports mapping information
@@ -86,7 +86,7 @@ Use the <info>--force</info> option, if you want to override existing mapping fi
 
 <info>php %command.full_name% "MyCustomBundle" xml --force</info>
 EOT
-        );
+            );
     }
 
     /**
@@ -101,7 +101,7 @@ EOT
 
         // assume a namespace has been passed
         $destPath  = $input->getOption('path');
-        $namespace = $input->getOption('namespace');
+        $namespace = $input->getArgument('name');
 
         if ($destPath === null) {
             throw new InvalidArgumentException('The --path option is required when passing a namespace (e.g. --path=src). If you intended to pass a bundle name, check your spelling.');
@@ -121,8 +121,7 @@ EOT
         $databaseDriver = new DatabaseDriver($em->getConnection()->getSchemaManager());
         $em->getConfiguration()->setMetadataDriverImpl($databaseDriver);
 
-        $emName = $input->getOption('em');
-        $emName = $emName ? $emName : 'default';
+        $emName = $input->getOption('em') ?: 'default';
 
         $cmf = new DisconnectedClassMetadataFactory();
         $cmf->setEntityManager($em);
