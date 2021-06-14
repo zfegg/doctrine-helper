@@ -28,8 +28,6 @@ class ProxyDoctrineCommand extends Command
 
     public function __construct(ManagerRegistry $doctrine, Command $command, string $prefix = 'doctrine')
     {
-        parent::__construct();
-
         $this->doctrine = $doctrine;
         $this->command = $command;
         $command->setName($prefix . ':' . $command->getName());
@@ -43,6 +41,7 @@ class ProxyDoctrineCommand extends Command
                 $this->execute($input, $output);
             })->bindTo($command)
         );
+        parent::__construct();
     }
 
     public function run(InputInterface $input, OutputInterface $output)
