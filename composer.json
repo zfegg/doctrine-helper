@@ -34,6 +34,6 @@
     "slevomat/coding-standard": "^6.4",
     "symfony/serializer": "^5.2",
     "laminas/laminas-servicemanager": "^3.6",
-    "roave/psr-container-doctrine": "^2.2"
+    "roave/psr-container-doctrine": "^3.0.0"
   }
 }
