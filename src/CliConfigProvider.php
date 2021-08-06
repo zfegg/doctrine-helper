@@ -5,6 +5,7 @@ namespace Zfegg\DoctrineHelper;
 
 use Doctrine\DBAL\Tools\Console as DBALConsole;
 use Doctrine\ORM\Tools\Console\Command as ORMCommand;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Zfegg\DoctrineHelper\Command\CreateDatabaseDoctrineCommand;
 use Zfegg\DoctrineHelper\Command\DropDatabaseDoctrineCommand;
 use Zfegg\DoctrineHelper\Command\ImportMappingDoctrineCommand;
@@ -14,12 +15,13 @@ class CliConfigProvider
 
     public function __invoke()
     {
-
-        $commands = [
+        $dbalCommands = [
             // DBAL Commands
             DBALConsole\Command\ReservedWordsCommand::class,
             DBALConsole\Command\RunSqlCommand::class,
+        ];
 
+        $commands = [
             // ORM Commands
             ORMCommand\ClearCache\CollectionRegionCommand::class,
             ORMCommand\ClearCache\EntityRegionCommand::class,
@@ -41,11 +43,20 @@ class CliConfigProvider
             ORMCommand\MappingDescribeCommand::class,
         ];
 
-        $commandFactories = array_fill_keys($commands, Factory\ProxyDoctrineCommandFactory::class);
+        $dbalCommandFactories = array_fill_keys(
+            $dbalCommands,
+            [Factory\AbstractInjectFactory::class, DBALConsole\ConnectionProvider::class],
+        );
+
+        $commandFactories = array_fill_keys(
+            $commands,
+            [Factory\AbstractInjectFactory::class, EntityManagerProvider::class],
+        );
 
         return [
 
             'commands' => [
+                ...$dbalCommands,
                 ...$commands,
                 CreateDatabaseDoctrineCommand::class,
                 DropDatabaseDoctrineCommand::class,
@@ -53,7 +64,7 @@ class CliConfigProvider
             ],
 
             'dependencies' => [
-                'factories' => $commandFactories,
+                'factories' => $commandFactories + $dbalCommandFactories,
             ],
         ];
     }

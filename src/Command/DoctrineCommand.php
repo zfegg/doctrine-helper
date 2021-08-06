@@ -18,13 +18,13 @@ use Symfony\Component\Console\Command\Command;
 abstract class DoctrineCommand extends Command
 {
     /** @var ManagerRegistry */
-    private $doctrine;
+    private $registry;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct();
 
-        $this->doctrine = $doctrine;
+        $this->registry = $registry;
     }
 
     /**
@@ -55,7 +55,7 @@ abstract class DoctrineCommand extends Command
      */
     protected function getEntityManager($name, $shardId = null)
     {
-        $manager = $this->getDoctrine()->getManager($name);
+        $manager = $this->getRegistry()->getManager($name);
 
         if ($shardId) {
             if (! $manager->getConnection() instanceof PoolingShardConnection) {
@@ -77,14 +77,14 @@ abstract class DoctrineCommand extends Command
      */
     protected function getDoctrineConnection($name)
     {
-        return $this->getDoctrine()->getConnection($name);
+        return $this->getRegistry()->getConnection($name);
     }
 
     /**
      * @return ManagerRegistry
      */
-    protected function getDoctrine()
+    protected function getRegistry()
     {
-        return $this->doctrine;
+        return $this->registry;
     }
 }

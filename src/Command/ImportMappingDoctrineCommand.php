@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Sharding\PoolingShardConnection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\DatabaseDriver;
+use Doctrine\ORM\Tools\Console\Command\AbstractEntityManagerCommand;
 use Doctrine\ORM\Tools\Console\MetadataFilter;
 use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
 use Doctrine\ORM\Tools\EntityGenerator;
@@ -28,20 +29,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * [shell]
  *   > console doctrine:mapping:import "App\Entity" --path=src/App/Entity
  */
-class ImportMappingDoctrineCommand extends Command
+class ImportMappingDoctrineCommand extends AbstractEntityManagerCommand
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private $doctrine;
-
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        parent::__construct();
-
-        $this->doctrine = $doctrine;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -52,7 +41,6 @@ class ImportMappingDoctrineCommand extends Command
             ->addArgument('name', InputArgument::REQUIRED, 'The namespace to import the mapping information to')
             ->addArgument('mapping-type', InputArgument::OPTIONAL, 'The mapping type to export the imported mapping information to')
             ->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command')
-            ->addOption('shard', null, InputOption::VALUE_REQUIRED, 'The shard connection to use for this command')
             ->addOption('filter', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'A string pattern used to match entities that should be mapped.')
             ->addOption('force', null, InputOption::VALUE_NONE, 'Force to overwrite existing mapping files.')
             ->addOption('path', null, InputOption::VALUE_REQUIRED, 'The path where the files would be generated (not used when a bundle is passed).')
@@ -116,7 +104,7 @@ EOT
             $exporter->setEntityGenerator($entityGenerator);
         }
 
-        $em = $this->getEntityManager($input->getOption('em'), $input->getOption('shard'));
+        $em = $this->getEntityManager($input);
 
         $databaseDriver = new DatabaseDriver($em->getConnection()->getSchemaManager());
         $em->getConfiguration()->setMetadataDriverImpl($databaseDriver);
@@ -155,51 +143,6 @@ EOT
 
         return 1;
     }
-
-
-    /**
-     * Get a doctrine entity manager by symfony name.
-     *
-     * @param string   $name
-     * @param int|null $shardId
-     *
-     * @return EntityManager
-     */
-    protected function getEntityManager($name, $shardId = null)
-    {
-        $manager = $this->getDoctrine()->getManager($name);
-
-        if ($shardId) {
-            if (! $manager->getConnection() instanceof PoolingShardConnection) {
-                throw new LogicException(sprintf("Connection of EntityManager '%s' must implement shards configuration.", $name));
-            }
-
-            $manager->getConnection()->connect($shardId);
-        }
-
-        return $manager;
-    }
-
-    /**
-     * Get a doctrine dbal connection by symfony name.
-     *
-     * @param string $name
-     *
-     * @return Connection
-     */
-    protected function getDoctrineConnection($name)
-    {
-        return $this->getDoctrine()->getConnection($name);
-    }
-
-    /**
-     * @return ManagerRegistry
-     */
-    protected function getDoctrine()
-    {
-        return $this->doctrine;
-    }
-
 
     /**
      * get a doctrine entity generator
