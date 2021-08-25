@@ -1,7 +1,6 @@
 {
   "name": "zfegg/doctrine-helper",
   "description": "Doctrine helpers.",
-  "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
     {
@@ -10,7 +9,7 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ^8.0",
+    "php": ">=7.4",
     "doctrine/orm": "^2.5",
     "psr/container": "^1.0"
   },
