@@ -44,6 +44,7 @@ class DoctrineAbstractFactory implements AbstractFactoryInterface
             'event_manager' => EventManagerFactory::class,
             'migrations' => MigrationsConfigurationFactory::class,
         ];
-        return call_user_func([$factoryMap[$service], $name], $container);
+        return (new $factoryMap[$service]($name))($container);
+//        return call_user_func([$factoryMap[$service], $name], $container);
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper;
 
@@ -18,17 +18,23 @@ class ContainerEntityListenerResolver implements EntityListenerResolver
     /**
      * @inheritDoc
      */
-    public function resolve($className)
+    public function resolve($className): object
     {
         return $this->container->get($className);
     }
 
-    function clear($className = null)
+    /**
+     * @inheritdoc
+     */
+    public function clear(string|null $className = null): void
     {
         throw new \RuntimeException('Use container instead.');
     }
 
-    function register($object)
+    /**
+     * @inheritdoc
+     */
+    public function register(object $object): void
     {
         throw new \RuntimeException('Use container instead.');
     }
