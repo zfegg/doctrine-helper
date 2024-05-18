@@ -51,7 +51,7 @@ EOT
     /**
      * {@inheritDoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connectionName = $input->getOption('connection');
         if (empty($connectionName)) {
