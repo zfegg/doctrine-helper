@@ -26,7 +26,7 @@ class ContainerEntityListenerResolver implements EntityListenerResolver
     /**
      * @inheritdoc
      */
-    public function clear(string|null $className = null): void
+    public function clear($className = null): void
     {
         throw new \RuntimeException('Use container instead.');
     }
@@ -34,7 +34,7 @@ class ContainerEntityListenerResolver implements EntityListenerResolver
     /**
      * @inheritdoc
      */
-    public function register(object $object): void
+    public function register($object): void
     {
         throw new \RuntimeException('Use container instead.');
     }
