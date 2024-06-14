@@ -26,6 +26,9 @@
   "extra": {
     "laminas": {
       "config-provider": "Zfegg\\DoctrineHelper\\ConfigProvider"
+    },
+    "branch-alias": {
+      "dev-master": "0.2.x-dev"
     }
   },
   "require-dev": {

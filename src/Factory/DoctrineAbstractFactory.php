@@ -4,8 +4,8 @@
 namespace Zfegg\DoctrineHelper\Factory;
 
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
+use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\CacheFactory;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
@@ -19,7 +19,7 @@ class DoctrineAbstractFactory implements AbstractFactoryInterface
     /**
      * @inheritDoc
      */
-    public function canCreate(ContainerInterface $container, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName): bool
     {
         if (strpos($requestedName, 'doctrine.') !== 0) {
             return false;
@@ -32,7 +32,7 @@ class DoctrineAbstractFactory implements AbstractFactoryInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): mixed
     {
         [, $service, $name] = explode('.', $requestedName);
         $factoryMap = [
