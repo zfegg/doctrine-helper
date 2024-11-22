@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper;
 
@@ -13,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class ConfigProvider
 {
 
-    public function __invoke()
+    public function __invoke(): array
     {
         return [
             'dependencies' => [
@@ -26,7 +27,6 @@ class ConfigProvider
                     Command\ManagerRegistryProvider::class =>
                         [Factory\AbstractInjectFactory::class, ManagerRegistry::class],
                     ContainerManagerRegistry::class => Factory\ContainerManagerRegistryFactory::class,
-                    ContainerRepositoryFactory::class => Factory\ContainerRepositoryFactoryFactory::class,
                 ],
                 'aliases' => [
                     ManagerRegistry::class => ContainerManagerRegistry::class,

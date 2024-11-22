@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectRepository;
@@ -17,10 +18,9 @@ use function sprintf;
 final class ContainerRepositoryFactory implements RepositoryFactory
 {
     /** @var ObjectRepository[] */
-    private $managedRepositories = [];
+    private array $managedRepositories = [];
 
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -30,7 +30,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     /**
      * {@inheritdoc}
      */
-    public function getRepository(EntityManagerInterface $entityManager, $entityName)
+    public function getRepository(EntityManagerInterface $entityManager, string $entityName): EntityRepository
     {
         $metadata             = $entityManager->getClassMetadata($entityName);
         $customRepositoryName = $metadata->customRepositoryClassName;
@@ -68,7 +68,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     public function getOrCreateRepository(
         EntityManagerInterface $entityManager,
         ClassMetadata $metadata
-    ) : ObjectRepository {
+    ): ObjectRepository {
         $repositoryHash = $metadata->getName() . spl_object_hash($entityManager);
         if (isset($this->managedRepositories[$repositoryHash])) {
             return $this->managedRepositories[$repositoryHash];

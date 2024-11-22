@@ -1,23 +1,20 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper;
 
 use Doctrine\DBAL\Tools\Console as DBALConsole;
 use Doctrine\ORM\Tools\Console\Command as ORMCommand;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider;
-use Zfegg\DoctrineHelper\Command\CreateDatabaseDoctrineCommand;
-use Zfegg\DoctrineHelper\Command\DropDatabaseDoctrineCommand;
-use Zfegg\DoctrineHelper\Command\ImportMappingDoctrineCommand;
 
 class CliConfigProvider
 {
 
-    public function __invoke()
+    public function __invoke(): array
     {
         $dbalCommands = [
             // DBAL Commands
-            DBALConsole\Command\ReservedWordsCommand::class,
             DBALConsole\Command\RunSqlCommand::class,
         ];
 
@@ -32,11 +29,7 @@ class CliConfigProvider
             ORMCommand\SchemaTool\CreateCommand::class,
             ORMCommand\SchemaTool\UpdateCommand::class,
             ORMCommand\SchemaTool\DropCommand::class,
-            ORMCommand\EnsureProductionSettingsCommand::class,
-            ORMCommand\GenerateRepositoriesCommand::class,
-            ORMCommand\GenerateEntitiesCommand::class,
             ORMCommand\GenerateProxiesCommand::class,
-            ORMCommand\ConvertMappingCommand::class,
             ORMCommand\RunDqlCommand::class,
             ORMCommand\ValidateSchemaCommand::class,
             ORMCommand\InfoCommand::class,
@@ -58,9 +51,6 @@ class CliConfigProvider
             'commands' => [
                 ...$dbalCommands,
                 ...$commands,
-                CreateDatabaseDoctrineCommand::class,
-                DropDatabaseDoctrineCommand::class,
-                ImportMappingDoctrineCommand::class,
             ],
 
             'dependencies' => [

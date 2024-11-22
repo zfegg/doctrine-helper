@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper;
 
@@ -8,17 +10,15 @@ use Psr\Container\ContainerInterface;
 class ContainerEntityListenerResolver implements EntityListenerResolver
 {
 
-    private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private ContainerInterface $container
+    ) {
     }
 
     /**
      * @inheritDoc
      */
-    public function resolve($className): object
+    public function resolve(string $className): object
     {
         return $this->container->get($className);
     }
@@ -26,7 +26,7 @@ class ContainerEntityListenerResolver implements EntityListenerResolver
     /**
      * @inheritdoc
      */
-    public function clear($className = null): void
+    public function clear(string|null $className = null): void
     {
         throw new \RuntimeException('Use container instead.');
     }
@@ -34,7 +34,7 @@ class ContainerEntityListenerResolver implements EntityListenerResolver
     /**
      * @inheritdoc
      */
-    public function register($object): void
+    public function register(object $object): void
     {
         throw new \RuntimeException('Use container instead.');
     }

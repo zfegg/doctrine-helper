@@ -8,11 +8,13 @@ trait IdPrimaryTrait
 {
 
     /**
-     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\Column("id", "integer")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue("IDENTITY")]
+    private int $id;
 }

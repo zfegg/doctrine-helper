@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper\Factory;
 
@@ -17,7 +18,8 @@ class ContainerManagerRegistryFactory
         if (empty($doctrineConfig['connection']) || empty($doctrineConfig['entity_manager'])) {
             throw new class('Empty doctrine config.')
                 extends \RuntimeException
-                implements ContainerExceptionInterface {};
+                implements ContainerExceptionInterface {
+            };
         }
 
         $connections = $entityManagers = [];

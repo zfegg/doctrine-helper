@@ -4,6 +4,7 @@ namespace ZfeggTest\DoctrineHelper;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use Psr\Container\ContainerInterface;
 use Zfegg\DoctrineHelper\ContainerConnectionProvider;
 use PHPUnit\Framework\TestCase;
@@ -13,9 +14,11 @@ class ContainerConnectionProviderTest extends TestCase
 
     public function testGetConnection()
     {
+        $dsnParser = new DsnParser(['sqlite' => 'pdo_sqlite']);
+        $params = $dsnParser->parse( 'sqlite::memory:');
         $connections = [
-            'doctrine.connection.default' => DriverManager::getConnection(['url' => 'sqlite::memory:']),
-            'doctrine.connection.test' => DriverManager::getConnection(['url' => 'sqlite::memory:']),
+            'doctrine.connection.default' => DriverManager::getConnection($params),
+            'doctrine.connection.test' => DriverManager::getConnection($params),
         ];
 
         $container = $this->createMock(ContainerInterface::class);

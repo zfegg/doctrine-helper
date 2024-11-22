@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace Zfegg\DoctrineHelper\Command;
-
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider;
